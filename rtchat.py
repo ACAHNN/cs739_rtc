@@ -14,7 +14,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
         }
 
-        template = JINJA_ENVIRONMENT.get_template('index.html')
+        template = JINJA_ENVIRONMENT.get_template('signin.html')
         self.response.write(template.render(template_values))
 
 application = webapp2.WSGIApplication([
