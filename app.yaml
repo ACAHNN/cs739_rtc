@@ -7,6 +7,8 @@ threadsafe: true
 handlers:
 - url: /css
   static_dir: css
+- url: /font
+  static_dir: font
 - url: /bootstrap
   static_dir: bootstrap
 - url: /.*

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Real-Time Chat</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="css/chat.css" rel="stylesheet">
+
+        <link href="http://fonts.useso.com/css?family=Lato:100,300,400,700" media="all" rel="stylesheet" type="text/css"/>
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">RTChat</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Setting <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="container-fluid main-content">
+            <div class="page-title">
+                <h1>
+                Chatting
+                </h1>
+            </div>
+            <div class="row">
+                <!-- Conversation -->
+                <div class="col-lg-12">
+                    <div class="widget-container scrollable chat chat-page">
+                        <div class="contact-list">
+                            <div class="heading">
+                            Contacts(1)<i class="icon-plus pull-right"></i>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="#">Alice <i class="icon-circle text-danger"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="heading">
+                            <i class="icon-comments"></i>Chat with <a href="#">Alice</a><i class="icon-cog pull-right"></i><i class="icon-smile pull-right"></i>
+                        </div>
+
+                        <div class="widget-content padded">
+                            <ul>
+                                <li>
+                                    <div class="bubble">
+                                        <a class="user-name" href="#">Alice</a>
+                                        <p class="message">
+                                            Lazy dog jump over...
+                                        </p>
+                                        <p class="time">
+                                        <strong>Today </strong>3:53 pm
+                                        </p>
+                                    </div>
+                                </li>
+
+                                <li class="current-user">
+                                    <div class="bubble">
+                                        <a class="user-name" href="#">Me</a>
+                                        <p class="message">
+                                            Hey There, dinner tomorrow?
+                                        </p>
+                                        <p class="time">
+                                            <strong>Today </strong>3:53 pm
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="post-message">
+                            <input class="form-control" placeholder="Input Message..." type="text"><input type="submit" value="Send">
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,273 @@
+body {
+    font-family: "Lato",sans-serif !important;
+    color: #666;
+    background: none repeat scroll 0% 0% #E8E8E8;
+    min-height: 100%;
+}
+
+.main-content {
+    padding-bottom: 20px;
+}
+
+.col-lg-12 {
+    padding: 0px 10px;
+}
+
+.row {
+    margin: 0px 10px;
+}
+
+* {
+    outline: 0px none !important;
+}
+
+.page-title {
+    padding: 0px 20px;
+}
+
+.widget-container {
+    min-height: 320px;
+    background: none repeat scroll 0% 0% #FFF;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.widget-container.chat-page {
+    height: 600px;
+    padding: 0px 0px 102px 222px;
+    position: relative;
+    background-color: #F2F2F2;
+}
+
+.widget-container.chat-page .contact-list {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 222px;
+    height: 100%;
+    border-right: 1px solid #DDD;
+    padding-top: 50px;
+}
+
+.widget-container.chat-page .contact-list .heading {
+    color: #777;
+    border-bottom: 1px solid #D6D6D6;
+    font-size: 16px;
+    padding-top: 12px;
+    padding-bottom: 14px;
+    background-color: #F2F2F2;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.widget-container.chat-page .contact-list ul {
+    list-style: outside none none;
+    padding-left: 15px;
+    margin: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+.widget-container.chat-page .contact-list ul li {
+    border-bottom: 1px solid #D6D6D6;
+    margin: 0px;
+}
+
+.widget-container.chat-page .contact-list ul li a {
+    display: block;
+    position: relative;
+    left: -15px;
+    width: 220px;
+    padding: 8px 0px 8px 15px;
+    color: #888;
+}
+
+.widget-container.chat-page .contact-list ul li i {
+    font-size: 12px;
+    float: right;
+    margin: 9px 20px 0px 0px;
+}
+
+.widget-container .heading {
+    background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.94);
+    height: 50px;
+    padding: 15px;
+    color: #007AFF;
+    font-size: 15px;
+    width: 100%;
+    font-weight: 400;
+    margin: 0px;
+}
+
+.widget-container.scrollable .heading {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+}
+
+.widget-container.chat-page > .heading {
+    position: relative !important;
+}
+
+.padded {
+    padding: 15px;
+}
+
+.widget-container .widget-content {
+    width: 100%;
+}
+
+.chat .widget-content {
+    padding-right: 20px;
+    background-color: #FFF;
+}
+
+.widget-container.scrollable .widget-content {
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+}
+
+.chat .widget-content ul {
+    list-style: outside none none;
+    padding: 0px;
+}
+
+.chat .widget-content ul li {
+    margin-bottom: 14px;
+    padding-left: 40px;
+    padding-right: 80px;
+    position: relative;
+}
+
+.chat .widget-content ul li .bubble {
+    padding: 12px 15px;
+    background: none repeat scroll 0% 0% #E5E5EA;
+    border-radius: 15px;
+    position: relative;
+}
+
+.chat .widget-content ul li .bubble:after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: -5px;
+    background: url('../images/chat-left.png') no-repeat scroll left top transparent;
+    width: 13px;
+    height: 13px;
+    display: block;
+}
+
+.chat .widget-content ul li.current-user {
+    padding-right: 40px;
+    padding-left: 80px;
+}
+
+.chat .widget-content ul li .bubble {
+    padding: 12px 15px;
+    background: none repeat scroll 0% 0% #E5E5EA;
+    border-radius: 15px;
+    position: relative;
+}
+
+.chat .widget-content ul li.current-user .bubble {
+    background: none repeat scroll 0% 0% #178EFE;
+}
+
+.chat .widget-content ul li .bubble .user-name {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.chat .widget-content ul li.current-user p, .chat .widget-content ul li.current-user a {
+    color: #FFF !important;
+}
+
+p {
+    margin: 0px 0px 15px;
+}
+
+.chat .widget-content ul li.current-user p, .chat .widget-content ul li.current-user a {
+    color: #FFF !important;
+}
+
+.chat .widget-content ul li .bubble p.message {
+    font-size: 0.95em;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.chat .widget-content ul li.current-user p, .chat .widget-content ul li.current-user a {
+    color: #FFF !important;
+}
+
+.chat .widget-content ul li .bubble .time {
+    font-size: 0.8em;
+    color: #888;
+    margin-bottom: 0px;
+}
+
+.chat .widget-content ul li.current-user .time {
+    opacity: 0.75;
+}
+
+.chat .post-message {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 52px;
+    padding: 8px 60px 8px 8px;
+    background: none repeat scroll 0% 0% #F2F2F2;
+    border-top: 1px solid #CCC;
+}
+
+.widget-container.chat-page .post-message {
+    position: relative;
+}
+
+.form-control {
+    transition: all 0.5s ease 0s;
+}
+
+input[type="text"] {
+    box-shadow: none !important;
+}
+
+.chat .post-message input[type="text"] {
+    width: 100%;
+    height: 100%;
+}
+
+.chat .post-message input[type="submit"] {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    margin: 0px;
+    border: 0px none;
+    background: none repeat scroll 0% 0% transparent;
+    color: #007AFF;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.widget-container .heading [class^="icon-"], .widget-container .heading [class*="icon-"] {
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.widget-container .heading .pull-right[class^="icon-"], .widget-container .heading .pull-right[class*="icon-"] {
+    margin-right: 0px;
+    margin-left: 15px;
+    opacity: 0.35;
+    font-size: 1.1em;
+}
+
+.widget-container.chat-page .contact-list .heading i {
+    margin-top: 4px;
+    font-size: 1em;
+}
