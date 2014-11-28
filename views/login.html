@@ -29,14 +29,14 @@
                 <strong>  Login </strong>
               </div>
               <div class="panel-body">
-                <form role="form" method="post" action="/login" nonvalidate="nonvalidate">
+                <form role="form" method="post" action="/login">
                 <div class="form-group input-group">
                   <span class="input-group-addon"><i class="fa fa-tag"  ></i></span>
-                  <input type="text" class="form-control" placeholder="Your Username " />
+                  <input type="text" class="focused required form-control" name="username" placeholder="Your Username " />
                 </div>
                 <div class="form-group input-group">
                   <span class="input-group-addon"><i class="fa fa-lock"  ></i></span>
-                  <input type="password" class="form-control"  placeholder="Your Password" />
+                  <input type="password" class="focused required form-control" name="password" placeholder="Your Password" />
                 </div>
                 <div class="form-group">
                   <label class="checkbox-inline"> <input type="checkbox" /> Remember me</label>
