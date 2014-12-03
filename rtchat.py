@@ -14,6 +14,10 @@ from webapp2_extras import sessions
 
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
+from models import OuterUser #added
+from models import User #added
+
+from time import sleep #added
 
 def user_required(handler):
   """
@@ -126,9 +130,26 @@ class SignupHandler(BaseHandler):
     
     user = user_data[1]
     user_id = user.get_id()
-
     token = self.user_model.create_signup_token(user_id)
-
+    
+   # sleep(2)
+   # user1 = User.query(ndb.GenericProperty('user_name') == 'asdf').fetch()
+   # logging.info('USER LIST %s', user1)
+   # user[0].add_friend("test")
+    
+   # user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
+   # logging.info('OUTERUSER %s', user1)
+   # user1[0].add_friend("test")
+   # outerUser.put() 
+#    test = PersistantUser()
+#    test.m_userName = user_name
+#    test.m_password = password
+#    test.m_realName = name
+#    test.put()
+#    logging.info('TEST KEY %s', test.key)
+#    logging.info('USER USER USER %s', User.get_by_auth_id('u\'asdf\'' ) )
+    #testQuery = OuterUser.query(User.get_by_auth_id('asdf').Key)
+    #logging.info("KEY OF OUTERUESR %s", testQuery.m_key)
     self.redirect(self.uri_for('login'))
 
 class LoginHandler(BaseHandler):
@@ -138,6 +159,8 @@ class LoginHandler(BaseHandler):
   def post(self):
     username = self.request.get('username')
     password = self.request.get('password')
+    
+    
     try:
       u = self.auth.get_user_by_password(username, password, remember=True,
         save_session=True)
