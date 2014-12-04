@@ -132,10 +132,11 @@ class SignupHandler(BaseHandler):
     user_id = user.get_id()
     token = self.user_model.create_signup_token(user_id)
     
-   # sleep(2)
-   # user1 = User.query(ndb.GenericProperty('user_name') == 'asdf').fetch()
-   # logging.info('USER LIST %s', user1)
-   # user[0].add_friend("test")
+    sleep(2)
+    user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
+    logging.info('USER LIST %s', user1)
+    user1[0].add_friend("asdf")
+    user1[0].add_friend("another friend")
     
    # user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
    # logging.info('OUTERUSER %s', user1)

@@ -18,13 +18,18 @@ class OuterUser(model.Expando):
   m_userName = model.StringProperty
   m_key = model.IntegerProperty #key to user object created by signup process. Contains password, name, authid
   
-  m_friends = model.StringProperty #list of friends authIDs
+  m_friends = model.StringProperty(repeated = True) #list of friends authIDs
   
   def add_friend (self, friendName):
     #returns true if friend could be added
     #friendname is the authid of the friend.
     
-    self.m_friends = friendName
+    #check to see if user exists
+    query = OuterUser.query(ndb.GenericProperty("m_userName") == friendName).fetch()
+    if not query:
+        return False, "no such user"
+    
+    self.m_friends.append(friendName)
     self.put()
   
   
@@ -99,7 +104,7 @@ class User(webapp2_extras.appengine.auth.models.User):
         user_values['password'] = security.generate_password_hash(
             user_values.pop('password_raw'), length=12)
     user_values['auth_ids'] = [auth_id]
-    user = cls(user_name=auth_id, **user_values)  # added user_name
+    user = cls(m_userName=auth_id, **user_values)  # added user_name
     # Set up unique properties.
     uniques = [('%s.auth_id:%s' % (cls.__name__, auth_id), 'auth_id')]
     if unique_properties:
