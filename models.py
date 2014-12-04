@@ -23,6 +23,7 @@ class OuterUser(model.Expando):
   def add_friend (self, friendName):
     #returns true if friend could be added
     #friendname is the authid of the friend.
+    #currently possible to add yourself as a friend
     
     #check to see if user exists
     query = OuterUser.query(ndb.GenericProperty("m_userName") == friendName).fetch()
@@ -31,6 +32,24 @@ class OuterUser(model.Expando):
     
     self.m_friends.append(friendName)
     self.put()
+    
+  def get_friend(self, friendName):
+    #returns the OuterUser of the friend being searched for
+    
+    #check to see if the person we are searching for is in the list
+    #if so, that means we can query for them as add friend only adds people in the datastore
+    if not friendName in self.m_friends:
+      return False
+    
+    else:
+      query = OuterUser.query(ndb.GenericProperty('m_userName') == friendName).fetch()
+      if not query:
+          return False, "Unforeseen Error"
+      return True, query[0]
+      
+  def get_friendsList(self):
+    #just returns the list of friends usernames
+    return self.m_friends
   
   
 

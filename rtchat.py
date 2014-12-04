@@ -138,6 +138,9 @@ class SignupHandler(BaseHandler):
     user1[0].add_friend("asdf")
     user1[0].add_friend("another friend")
     
+    logging.info("FRIENDS LIST PRITNED %s", user1[0].get_friendsList())
+    
+    
    # user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
    # logging.info('OUTERUSER %s', user1)
    # user1[0].add_friend("test")
