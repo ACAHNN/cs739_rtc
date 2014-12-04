@@ -17,7 +17,7 @@ class OuterUser(model.Expando):
   
   m_userName = model.StringProperty
   m_key = model.IntegerProperty #key to user object created by signup process. Contains password, name, authid
-  
+  m_name = model.StringProperty
   m_friends = model.StringProperty(repeated = True) #list of friends authIDs
   
   def add_friend (self, friendName):
@@ -136,7 +136,8 @@ class User(webapp2_extras.appengine.auth.models.User):
     
     if ok:
         ndb_key = user.put() #added
-        outeruser = OuterUser(m_userName = auth_id, m_key = ndb_key) #added
+        
+        outeruser = OuterUser(m_userName = auth_id, m_key = ndb_key, m_name = user_values['name']) #added
         outeruser.put() #added
         return True, user, ndb_key #added
     else:
