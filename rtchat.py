@@ -2,18 +2,17 @@
 
 # Real-time Chat Server
 
-from google.appengine.ext.webapp import template
-from google.appengine.ext import ndb
-
 import logging
 import os.path
 import webapp2
-
+from google.appengine.ext.webapp import template
+from google.appengine.ext import ndb
+from google.appengine.api import channel
 from webapp2_extras import auth
 from webapp2_extras import sessions
-
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
+
 from models import User
 from models import FriendList
 
@@ -110,9 +109,12 @@ class MainHandler(BaseHandler):
       friend_count = 0
     else:
       friend_count = len(friend_list)
+
+    token = channel.create_channel(self.user.auth_ids[0])
     params = {
       'friend_count': friend_count,
       'friend_list': friend_list,
+      'token': token,
     }
     self.render_template('chat.html', params)
 
@@ -186,6 +188,11 @@ class AddFriendHandler(BaseHandler):
           return
     
     self.redirect(self.uri_for('add'))
+
+class SendMessageHandler(BaseHandler):
+  @user_required
+  def post(self):
+    pass
     
 config = {
   'webapp2_extras.auth': {
@@ -202,7 +209,8 @@ application = webapp2.WSGIApplication([
     webapp2.Route('/signup', SignupHandler),
     webapp2.Route('/login', LoginHandler, name='login'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
-    webapp2.Route('/add_friend', AddFriendHandler, name='add')
+    webapp2.Route('/add_friend', AddFriendHandler, name='add'),
+    webapp2.Route('/send_message', SendMessageHandler, name='message')
 ], debug=True, config=config)
 
 logging.getLogger().setLevel(logging.DEBUG)
