@@ -14,10 +14,8 @@ from webapp2_extras import sessions
 
 from webapp2_extras.auth import InvalidAuthIdError
 from webapp2_extras.auth import InvalidPasswordError
-from models import OuterUser #added
-from models import User #added
-
-from time import sleep #added
+from models import User
+from models import FriendList
 
 def user_required(handler):
   """
@@ -107,7 +105,14 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
   @user_required
   def get(self):
-    self.render_template('chat.html')
+    #FriendList.add_friend("2345", "1234")
+    friend_list = FriendList.get_friend_list(self.user.auth_ids[0])
+    params = {
+      ''
+      'friend_count': len(friend_list),
+      'friend_list': friend_list,
+    }
+    self.render_template('chat.html', params)
 
 class SignupHandler(BaseHandler):
   def get(self):
@@ -131,29 +136,6 @@ class SignupHandler(BaseHandler):
     user = user_data[1]
     user_id = user.get_id()
     token = self.user_model.create_signup_token(user_id)
-    
-  #   sleep(2)
-  #   user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
-  #   logging.info('USER LIST %s', user1)
-  #   user1[0].add_friend("asdf")
-  #   user1[0].add_friend("another friend")
-    
-  #   logging.info("FRIENDS LIST PRITNED %s", user1[0].get_friendsList())
-    
-    
-  # user1 = OuterUser.query(ndb.GenericProperty('m_userName') == 'asdf').fetch()
-  # logging.info('OUTERUSER %s', user1)
-  # user1[0].add_friend("test")
-  # outerUser.put() 
-#    test = PersistantUser()
-#    test.m_userName = user_name
-#    test.m_password = password
-#    test.m_realName = name
-#    test.put()
-#    logging.info('TEST KEY %s', test.key)
-#    logging.info('USER USER USER %s', User.get_by_auth_id('u\'asdf\'' ) )
-    #testQuery = OuterUser.query(User.get_by_auth_id('asdf').Key)
-    #logging.info("KEY OF OUTERUESR %s", testQuery.m_key)
     self.redirect(self.uri_for('login'))
 
 class LoginHandler(BaseHandler):
@@ -163,7 +145,6 @@ class LoginHandler(BaseHandler):
   def post(self):
     username = self.request.get('username')
     password = self.request.get('password')
-    
     
     try:
       u = self.auth.get_user_by_password(username, password, remember=True,
@@ -186,6 +167,23 @@ class LogoutHandler(BaseHandler):
     self.auth.unset_session()
     self.redirect(self.uri_for('login'))
 
+class AddFriendHandler(BaseHandler):
+  @user_required
+  def get(self):
+    self.render_template('add_friend.html')
+
+  @user_required
+  def post(self):
+    friend_name = self.request.get('username')
+    # doesn't make sense to search for yourself
+    if friend_name != self.user.auth_ids[0]:
+      user_info = User.query_user(friend_name)
+      if user_info:
+        if FriendList.add_friend(self.user.auth_ids[0], friend_name):
+          self.redirect(self.uri_for('home'))
+    
+    self.redirect(self.uri_for('add'))
+    
 config = {
   'webapp2_extras.auth': {
     'user_model': 'models.User',
@@ -201,6 +199,7 @@ application = webapp2.WSGIApplication([
     webapp2.Route('/signup', SignupHandler),
     webapp2.Route('/login', LoginHandler, name='login'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
+    webapp2.Route('/add_friend', AddFriendHandler, name='add')
 ], debug=True, config=config)
 
 logging.getLogger().setLevel(logging.DEBUG)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Signin Real-Time Chat</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/add_friend.css" rel="stylesheet">
+  </head>
+    <div class="container">
+
+      <form class="form-add" role="form" method="post" action="/add_friend">
+        <h2 class="form-add-heading">Friend's ID</h2>
+        <label for="username" class="sr-only">user name</label>
+        <input name="username" class="form-control" placeholder="user name" required autofocus>
+        <p> </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>    
+      </form>
+    </div>
+  <body>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

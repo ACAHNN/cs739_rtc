@@ -1,61 +1,57 @@
 import time
 import webapp2_extras.appengine.auth.models
-
 from google.appengine.ext import ndb
-from webapp2_extras.appengine.auth.models import UserToken
-
-try:
-    from ndb import model
-except ImportError: # pragma: no cover
-    from google.appengine.ext.ndb import model
-
+from google.appengine.ext import db
 from webapp2_extras import security
 
+class FriendList(ndb.Model):
+  username = ndb.StringProperty()
+  friends = ndb.StringProperty(repeated=True)
 
-#outerclass for user to hold the built in user structrue and our friendslist  
-class OuterUser(model.Expando):
-  
-  m_userName = model.StringProperty
-  m_key = model.IntegerProperty #key to user object created by signup process. Contains password, name, authid
-  m_name = model.StringProperty
-  m_friends = model.StringProperty(repeated = True) #list of friends authIDs
-  
-  def add_friend (self, friendName):
-    #returns true if friend could be added
-    #friendname is the authid of the friend.
-    #currently possible to add yourself as a friend
-    
+  @classmethod
+  def query_friends(cls, user_name):
+    return FriendList.query(FriendList.username == user_name).fetch()
+
+  @classmethod
+  def add_friend (cls, user_name, friend_name):
     #check to see if user exists
-    query = OuterUser.query(ndb.GenericProperty("m_userName") == friendName).fetch()
+    query = cls.query_friends(user_name)
     if not query:
-        return False, "no such user"
-    
-    self.m_friends.append(friendName)
-    self.put()
-    
-  def get_friend(self, friendName):
-    #returns the OuterUser of the friend being searched for
-    
-    #check to see if the person we are searching for is in the list
-    #if so, that means we can query for them as add friend only adds people in the datastore
-    if not friendName in self.m_friends:
+      print "No friend list information for " + user_name + ", Let's create it"
+      query = FriendList(username = user_name, friends=[])
+    elif friend_name in query[0].friends:
+      print friend_name + " is already " + user_name + "'s friend"
       return False
-    
-    else:
-      query = OuterUser.query(ndb.GenericProperty('m_userName') == friendName).fetch()
-      if not query:
-          return False, "Unforeseen Error"
-      return True, query[0]
-      
-  def get_friendsList(self):
-    #just returns the list of friends usernames
-    return self.m_friends
+
+    query[0].friends.append(friend_name)
+    query[0].put()
+    return True
   
-  
+  @classmethod
+  def delete_friend(cls, user_name, friend_name):
+    #check to see if user exists
+    query = cls.query_friends(user_name)
+    if not query:
+      print user_name + " is not valid"
+      return False
+
+    if not (friend_name in query.friends):
+      print friend_name + " is not " + user_name + "'s friend"
+      return False
+
+    query[0].friends.delete(friend_name)
+    query[0].put()
+    return True
+
+  @classmethod
+  def get_friend_list(cls, user_name):
+    query = cls.query_friends(user_name)
+    if not query:
+      print user_name + " is not valid"
+
+    return query[0].friends
 
 class User(webapp2_extras.appengine.auth.models.User):
-  
-  
   def set_password(self, raw_password):
     """Sets the password for the current user
 
@@ -85,61 +81,7 @@ class User(webapp2_extras.appengine.auth.models.User):
         return user, timestamp
 
     return None, None
-  
+
   @classmethod
-  def create_user(cls, auth_id, unique_properties=None, **user_values):
-    """Creates a new user.
-
-    :param auth_id:
-        A string that is unique to the user. Users may have multiple
-        auth ids. Example auth ids:
-
-        - own:username
-        - own:email@example.com
-        - google:username
-        - yahoo:username
-
-        The value of `auth_id` must be unique.
-    :param unique_properties:
-        Sequence of extra property names that must be unique.
-    :param user_values:
-        Keyword arguments to create a new user entity. Since the model is
-        an ``Expando``, any provided custom properties will be saved.
-        To hash a plain password, pass a keyword ``password_raw``.
-    :returns:
-        A tuple (boolean, info). The boolean indicates if the user
-        was created. If creation succeeds, ``info`` is the user entity;
-        otherwise it is a list of duplicated unique properties that
-        caused creation to fail.
-    """
-    assert user_values.get('password') is None, \
-        'Use password_raw instead of password to create new users.'
-
-    assert not isinstance(auth_id, list), \
-        'Creating a user with multiple auth_ids is not allowed, ' \
-        'please provide a single auth_id.'
-
-    if 'password_raw' in user_values:
-        user_values['password'] = security.generate_password_hash(
-            user_values.pop('password_raw'), length=12)
-    user_values['auth_ids'] = [auth_id]
-    user = cls(m_userName=auth_id, **user_values)  # added user_name
-    # Set up unique properties.
-    uniques = [('%s.auth_id:%s' % (cls.__name__, auth_id), 'auth_id')]
-    if unique_properties:
-        for name in unique_properties:
-            key = '%s.%s:%s' % (cls.__name__, name, user_values[name])
-            uniques.append((key, name))
-
-    ok, existing = cls.unique_model.create_multi(k for k, v in uniques)
-    
-    
-    if ok:
-        ndb_key = user.put() #added
-        
-        outeruser = OuterUser(m_userName = auth_id, m_key = ndb_key, m_name = user_values['name']) #added
-        outeruser.put() #added
-        return True, user, ndb_key #added
-    else:
-        properties = [v for k, v in uniques if k in existing]
-        return False, properties
+  def query_user(cls, user_name):
+    return User.query(ndb.GenericProperty('auth_ids') == user_name).fetch()

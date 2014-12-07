@@ -30,7 +30,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">RTChat</a>
+              <a class="navbar-brand" href="">RTChat</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -40,7 +40,7 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Setting <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/logout">Logout <b>{{user.name}}</b></a></li>
                     <li><a href="#">Another action</a></li>
                     <li><a href="#">Something else here</a></li>
                     <li class="divider"></li>
@@ -64,17 +64,22 @@
                     <div class="widget-container scrollable chat chat-page">
                         <div class="contact-list">
                             <div class="heading">
-                            Contacts(1)<i class="icon-plus pull-right"></i>
+                                Contacts({{friend_count}})
+                            <a class="icon-plus pull-right" href="/add_friend"></a>
                             </div>
                             <ul>
+                                {% for friend in friend_list %}
                                 <li>
-                                    <a href="#">Alice <i class="icon-circle text-danger"></i></a>
+                                    <a href="#">{{ friend }}
+                                        <i class="icon-circle text-danger"></i>
+                                    </a>
                                 </li>
+                                {% endfor %}
                             </ul>
                         </div>
 
                         <div class="heading">
-                            <i class="icon-comments"></i>Chat with <a href="#">Alice</a><i class="icon-cog pull-right"></i><i class="icon-smile pull-right"></i>
+                            <i class="icon-comments"></i>Chat with <a href="#">{{user.name}}</a><i class="icon-cog pull-right"></i><i class="icon-smile pull-right"></i>
                         </div>
 
                         <div class="widget-content padded">
