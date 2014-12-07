@@ -108,7 +108,6 @@ class MainHandler(BaseHandler):
     #FriendList.add_friend("2345", "1234")
     friend_list = FriendList.get_friend_list(self.user.auth_ids[0])
     params = {
-      ''
       'friend_count': len(friend_list),
       'friend_list': friend_list,
     }

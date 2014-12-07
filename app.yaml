@@ -11,6 +11,8 @@ handlers:
   static_dir: font
 - url: /bootstrap
   static_dir: bootstrap
+- url: /js
+  static_dir: js
 - url: /.*
   script: rtchat.application
 

@@ -70,58 +70,27 @@
                             <ul>
                                 {% for friend in friend_list %}
                                 <li>
-                                    <a href="#">{{ friend }}
+                                    <a href="javascript:void(0)" class="friend" id={{ friend }}>{{ friend }}
                                         <i class="icon-circle text-danger"></i>
                                     </a>
                                 </li>
                                 {% endfor %}
                             </ul>
                         </div>
-
-                        <div class="heading">
-                            <i class="icon-comments"></i>Chat with <a href="#">{{user.name}}</a><i class="icon-cog pull-right"></i><i class="icon-smile pull-right"></i>
-                        </div>
-
-                        <div class="widget-content padded">
-                            <ul>
-                                <li>
-                                    <div class="bubble">
-                                        <a class="user-name" href="#">Alice</a>
-                                        <p class="message">
-                                            Lazy dog jump over...
-                                        </p>
-                                        <p class="time">
-                                        <strong>Today </strong>3:53 pm
-                                        </p>
-                                    </div>
-                                </li>
-
-                                <li class="current-user">
-                                    <div class="bubble">
-                                        <a class="user-name" href="#">Me</a>
-                                        <p class="message">
-                                            Hey There, dinner tomorrow?
-                                        </p>
-                                        <p class="time">
-                                            <strong>Today </strong>3:53 pm
-                                        </p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="post-message">
-                            <input class="form-control" placeholder="Input Message..." type="text"><input type="submit" value="Send">
-                        </div>
+                        <!-- Chatting window start here -->
+                        <div class="heading" id="chat_title"> </div>
+                        <div class="widget-content padded" id="message_window"> </div>
+                        <div class="post-message" id="message_input"></div>
+                        <!-- Chatting window end here -->
                     </div>                   
                 </div>
             </div>
         </div>
 
-
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/chat.js"></script>
     </body>
 </html>
