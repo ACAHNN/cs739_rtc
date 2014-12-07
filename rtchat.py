@@ -105,7 +105,6 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
   @user_required
   def get(self):
-    #FriendList.add_friend("2345", "1234")
     friend_list = FriendList.get_friend_list(self.user.auth_ids[0])
     if not friend_list:
       friend_count = 0
@@ -184,6 +183,7 @@ class AddFriendHandler(BaseHandler):
       if user_info:
         if FriendList.add_friend(self.user.auth_ids[0], friend_name):
           self.redirect(self.uri_for('home'))
+          return
     
     self.redirect(self.uri_for('add'))
     
