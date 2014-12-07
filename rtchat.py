@@ -107,8 +107,12 @@ class MainHandler(BaseHandler):
   def get(self):
     #FriendList.add_friend("2345", "1234")
     friend_list = FriendList.get_friend_list(self.user.auth_ids[0])
+    if not friend_list:
+      friend_count = 0
+    else:
+      friend_count = len(friend_list)
     params = {
-      'friend_count': len(friend_list),
+      'friend_count': friend_count,
       'friend_list': friend_list,
     }
     self.render_template('chat.html', params)

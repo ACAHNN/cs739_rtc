@@ -18,7 +18,7 @@ class FriendList(ndb.Model):
     query = cls.query_friends(user_name)
     if not query:
       print "No friend list information for " + user_name + ", Let's create it"
-      query = FriendList(username = user_name, friends=[])
+      query = [FriendList(username = user_name, friends=[])]
     elif friend_name in query[0].friends:
       print friend_name + " is already " + user_name + "'s friend"
       return False
@@ -48,6 +48,7 @@ class FriendList(ndb.Model):
     query = cls.query_friends(user_name)
     if not query:
       print user_name + " is not valid"
+      return None
 
     return query[0].friends
 
