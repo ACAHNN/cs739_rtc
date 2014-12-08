@@ -7,9 +7,10 @@ from pyvirtualdisplay import Display
 
 class ChatBot:
 
-    def __init__(self, use_vd):
+    def __init__(self, use_vd, site):
         self._init_vd(use_vd)
         self._init_webdriver()
+        self.site = site
 
 
     def __del__(self):
@@ -68,7 +69,7 @@ class ChatBot:
     def create_account(self, name, username, password):
         print "Task: chatbot creating account -> username: %s password: %s" % (username, password)
 
-        self.visit('http://real-time-chat.appspot.com/signup')
+        self.visit(self.site+'/signup')
         element = self.wd.find_element_by_name('name')
         if element:
             element.send_keys(name)
@@ -89,7 +90,7 @@ class ChatBot:
 
     def add_friend(self, friend_name):
 
-        self.visit('http://real-time-chat.appspot.com/add_friend')
+        self.visit(self.site+'/add_friend')
         
         element = self.wd.find_element_by_name('username')
         if element:
@@ -97,13 +98,13 @@ class ChatBot:
             element.submit()
 
         success = False
-        if self.wd.current_url == 'http://real-time-chat.appspot.com/':
+        if self.wd.current_url == self.site:
             print "Task: chatbot added friend: %s" % friend_name
             success = True
         else:
             print "Error: chatbot failed to add friend: %s" % friend_name
 
-        self.visit('http://real-time-chat.appspot.com/')
+        self.visit(self.site)
         
         return success
 
@@ -126,6 +127,11 @@ class ChatBot:
                 element.click()
 
 
+    def get_messages(self):
+        
+        elements = self.wd.find_elements_by_class_name("message")
+        return elements
+    
     def send_message(self, msg):
 
         element = self.wd.find_element_by_id('msg_form')

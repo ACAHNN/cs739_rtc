@@ -7,13 +7,14 @@ from chatbot import ChatBot
 if __name__ == '__main__':
 
     # create a chatbot instance
-    cb1 = ChatBot(False)
+    site = 'localhost:8080'
+    cb1 = ChatBot(False, site)
 
     # navigate to the chat site
-    cb1.visit('http://real-time-chat.appspot.com/login')
+    cb1.visit(site)
 
     # enter the site
-    cb1.login('aaron', '1234')
+    cb1.login('asdf', 'asdf')
 
     # add a non-existent friend
     cb1.add_friend('bob1')
