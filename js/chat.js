@@ -62,7 +62,7 @@ updateMessageWindow = function() {
   htmlString += "</ul>";
 
   $("#message_window").html(htmlString);
-  
+
   var objDiv = document.getElementById("message_window");
   objDiv.scrollTop = objDiv.scrollHeight;
 }
@@ -97,6 +97,7 @@ $(document).ready(function() {
       $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>");
       $("#message_input").html("<form action=\"javascript:msgformPost();\"><input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\" id=\"msg_form\"><input type=\"submit\" value=\"Send\" id=\"send_msg_btn\"></form>");
       messages = [];
+      updateMessageWindow();
     }
     document.getElementById("msg_form").focus();
   });
