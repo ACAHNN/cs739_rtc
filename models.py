@@ -86,3 +86,4 @@ class User(webapp2_extras.appengine.auth.models.User):
   @classmethod
   def query_user(cls, user_name):
     return User.query(ndb.GenericProperty('auth_ids') == user_name).fetch()
+    

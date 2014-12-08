@@ -6,6 +6,7 @@ import logging
 import os.path
 import webapp2
 import cgi
+import json
 from google.appengine.ext.webapp import template
 from google.appengine.ext import ndb
 from google.appengine.api import channel
@@ -195,9 +196,16 @@ class SendMessageHandler(BaseHandler):
   def post(self):
     receiver = self.request.get('to')
     msg = self.request.get('msg')
+    self.dispatchMessage(receiver, msg)
 
-  def dispatchMessage(self):
-    pass
+  def dispatchMessage(self, receiver, msg):
+    print "sending message \"" + msg + "\" to " + "\"" + receiver + "\""
+    newMessage = {
+      'from': self.user.auth_ids[0],
+      'msg': msg,
+    }
+
+    channel.send_message(receiver, json.dumps(newMessage))
     
 config = {
   'webapp2_extras.auth': {

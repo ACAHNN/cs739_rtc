@@ -1,9 +1,10 @@
 msgformPost = function () {
   // Do something
   var input = document.getElementById("msg_form");
-  var inputData = encodeURI(input.value);
+  var inputData = encodeURIComponent(input.value);
   sendMessage("/send_message", "to=" + receiverName + "&msg=" + inputData);
   input.value = '';
+  document.getElementById("msg_form").focus();
 }
 
 getHttpRequest = function () {
@@ -30,7 +31,8 @@ onOpened = function() {
 
 onMessage = function(m) {
   newMessage = JSON.parse(m.data);
-  updateMessageBox();
+  console.log(newMessage);
+  
 }
 
 openChannel = function() {
