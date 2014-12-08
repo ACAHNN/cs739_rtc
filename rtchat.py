@@ -5,6 +5,7 @@
 import logging
 import os.path
 import webapp2
+import cgi
 from google.appengine.ext.webapp import template
 from google.appengine.ext import ndb
 from google.appengine.api import channel
@@ -192,6 +193,10 @@ class AddFriendHandler(BaseHandler):
 class SendMessageHandler(BaseHandler):
   @user_required
   def post(self):
+    receiver = self.request.get('to')
+    msg = self.request.get('msg')
+
+  def dispatchMessage(self):
     pass
     
 config = {

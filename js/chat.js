@@ -1,15 +1,27 @@
-$(document).ready(function(){
-  $('.friend').on("click",function(){
-    var user_name =  $(this).attr("id");
-    $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>")
-    $("#message_input").html("<input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\"><input type=\"submit\" value=\"Send\">")
-  })
-});
+msgformPost = function () {
+  // Do something
+  var input = document.getElementById("msg_form");
+  var inputData = encodeURI(input.value);
+  sendMessage("/send_message", "to=" + receiverName + "&msg=" + inputData);
+  input.value = '';
+}
 
-sendMessage = function(path, opt_param) {
-  var xhr = new XMLHttpRequest();
+getHttpRequest = function () {
+    var xmlhttp;
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    } else {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    return xmlhttp;
+}
+
+sendMessage = function(path, msg) {
+  var xhr = getHttpRequest();
   xhr.open('POST', path, true);
-  xhr.send();
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.send(msg);
 };
 
 onOpened = function() {
@@ -39,4 +51,13 @@ initialize = function() {
   //onMessage({data: '{{ initial_message }}'});
 }
 
-setTimeout(initialize, 100);  
+var receiverName;
+setTimeout(initialize, 100);
+$(document).ready(function() {
+  $('.friend').on("click", function() {
+    var user_name =  $(this).attr("id");
+    receiverName = user_name;
+    $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>");
+    $("#message_input").html("<form action=\"javascript:msgformPost();\"><input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\" id=\"msg_form\"><input type=\"submit\" value=\"Send\" id=\"send_msg_btn\"></form>")
+  });
+});
