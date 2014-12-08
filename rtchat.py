@@ -5,7 +5,6 @@
 import logging
 import os.path
 import webapp2
-import cgi
 import json
 from google.appengine.ext.webapp import template
 from google.appengine.ext import ndb
@@ -199,7 +198,7 @@ class SendMessageHandler(BaseHandler):
     self.dispatchMessage(receiver, msg)
 
   def dispatchMessage(self, receiver, msg):
-    print "sending message \"" + msg + "\" to " + "\"" + receiver + "\""
+    #print "sending message \"" + msg + "\" to " + "\"" + receiver + "\""
     newMessage = {
       'from': self.user.auth_ids[0],
       'msg': msg,
