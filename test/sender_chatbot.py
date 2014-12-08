@@ -44,20 +44,20 @@ if __name__ == '__main__':
     
     startTime = time.clock()
     
-  #  while time.clock() - startTime < sys.argv[4]:    
+    while time.clock() - startTime < sys.argv[4]:    
     
-      # send a message    
-    beforeSendTime = time.clock()
-    currentChatLength = len(cb1.get_messages()) #INSERT CURRENT CHAT LENGTH
-    cb1.send_message('qwerqwerwrreqr')
-    
-    while currentChatLength == len(cb1.get_messages()): #INSURT CURRENT CHAT LENGTH
-      #DONOTHIGN
-      nothing = 3
+        # send a message    
+      beforeSendTime = time.clock()
+      currentChatLength = len(cb1.get_messages()) #INSERT CURRENT CHAT LENGTH
+      cb1.send_message('qwerqwerwrreqr')
       
-    afterSendTime = time.clock()
-    roundTripMessageTimes.append(afterSendTime - beforeSendTime)
-  
-    time.sleep(1)
+      while currentChatLength == len(cb1.get_messages()): #INSURT CURRENT CHAT LENGTH
+        #DONOTHIGN
+        nothing = 3
+        
+      afterSendTime = time.clock()
+      roundTripMessageTimes.append(afterSendTime - beforeSendTime)
+    
+      time.sleep(1)
     cb1.logout()
     # logout

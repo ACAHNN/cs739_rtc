@@ -36,15 +36,14 @@ if __name__ == '__main__':
     # select friend chat window
     cb1.select_friend(aFriend)
     # send a message
-    currentChatLength = len(cb1.get_messages()) #INSERT CURRENT CHAT LENGTH
-    
-    while currentChatLength == len(cb1.get_messages()): #INSURT CURRENT CHAT LENGTH
-      #DONOTHIGN
-      nothing = 3
-    
-    cb1.send_message('qwerqwerwrreqr')
+    while True:
+      currentChatLength = len(cb1.get_messages()) #INSERT CURRENT CHAT LENGTH
+      
+      while currentChatLength == len(cb1.get_messages()): #INSURT CURRENT CHAT LENGTH
+        #DONOTHIGN
+        nothing = 3
+      
+      cb1.send_message('qwerqwerwrreqr')
         
-    
-    time.sleep(1)
     cb1.logout()
     # logout
