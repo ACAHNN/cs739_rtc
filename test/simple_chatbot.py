@@ -26,8 +26,9 @@ if __name__ == '__main__':
         # select friend chat window
         cb1.select_friend(friend)
         # send a message
-        cb1.send_message('qwertyuiopasadfghjklzxcvbnm')
-        time.sleep(1)
+        for i in range(0,5):
+            cb1.send_message('qwertyuiopasadfghjklzxcvbnm')
+            time.sleep(.5)
 
     # logout
     cb1.logout()
