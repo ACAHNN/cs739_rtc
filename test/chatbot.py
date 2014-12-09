@@ -7,10 +7,11 @@ from pyvirtualdisplay import Display
 
 class ChatBot:
 
-    def __init__(self, use_vd, site):
+    def __init__(self, use_vd, site, debug):
         self._init_vd(use_vd)
         self._init_webdriver()
         self.site = site
+        self.debug = debug
 
 
     def __del__(self):
@@ -37,13 +38,15 @@ class ChatBot:
 
 
     def visit(self, site):
-        print "Task: chatbot visiting %s" % site
+        if self.debug:
+          print "Task: chatbot visiting %s" % site
         self.wd.get(site)
         return None
 
         
     def login(self, username, password):
-        print "Task: chatbot logging in -> username: %s password %s" % (username, password)
+        if self.debug:
+          print "Task: chatbot logging in -> username: %s password %s" % (username, password)
 
         element = self.wd.find_element_by_name('username')
         if element:
@@ -63,11 +66,13 @@ class ChatBot:
             element2 = self.wd.find_element_by_partial_link_text('Logout')
             if element2:
                 element2.click()
-                print "Task: chatbot logged out"
+                if self.debug:
+                  print "Task: chatbot logged out"
 
 
     def create_account(self, name, username, password):
-        print "Task: chatbot creating account -> username: %s password: %s" % (username, password)
+        if self.debug:
+          print "Task: chatbot creating account -> username: %s password: %s" % (username, password)
 
         self.visit(self.site+'/signup')
         element = self.wd.find_element_by_name('name')
@@ -99,10 +104,12 @@ class ChatBot:
 
         success = False
         if self.wd.current_url == self.site:
-            print "Task: chatbot added friend: %s" % friend_name
+            if self.debug:
+              print "Task: chatbot added friend: %s" % friend_name
             success = True
         else:
-            print "Error: chatbot failed to add friend: %s" % friend_name
+            if self.debug:
+              print "Error: chatbot failed to add friend: %s" % friend_name
 
         self.visit(self.site)
         
@@ -123,7 +130,8 @@ class ChatBot:
         elements = self.wd.find_elements_by_class_name('friend')
         for element in elements:
             if element.text == friend_name:
-                print "Task: chatbot selected friend: %s to chat with" % friend_name 
+                if self.debug:
+                  print "Task: chatbot selected friend: %s to chat with" % friend_name 
                 element.click()
 
 
@@ -136,7 +144,8 @@ class ChatBot:
 
         element = self.wd.find_element_by_id('msg_form')
         if element:
-            print "Task: chatbot sent msg: %s" % msg
+            if self.debug:
+              print "Task: chatbot sent msg: %s" % msg
             element.send_keys(msg)
             element.submit()
         else:
