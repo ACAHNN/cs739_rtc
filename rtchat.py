@@ -16,6 +16,7 @@ from webapp2_extras.auth import InvalidPasswordError
 
 from models import User
 from models import FriendList
+from models import UserStatus
 
 def user_required(handler):
   """
@@ -105,16 +106,28 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
   @user_required
   def get(self):
-    friend_list = FriendList.get_friend_list(self.user.auth_ids[0])
-    if not friend_list:
-      friend_count = 0
-    else:
-      friend_count = len(friend_list)
+    user_name = self.user.auth_ids[0]
+    #friend_list = FriendList.get_friend_list(user_name)
+    #if not friend_list:
+    #  friend_count = 0
+    #else:
+    #  friend_count = len(friend_list)
 
-    token = channel.create_channel(self.user.auth_ids[0])
+    status = UserStatus.query_user_status(user_name)
+    if status:
+      token = status[0].token
+      # Send message to let previous page to exit!
+      #newMessage = {
+      #  'control': "multiple_login",
+      #}
+      #channel.send_message(user_name, json.dumps(newMessage))
+    else:
+      token = channel.create_channel(user_name)
+      UserStatus.add_user_status(user_name, token)
+    
     params = {
-      'friend_count': friend_count,
-      'friend_list': friend_list,
+      #'friend_count': friend_count,
+      #'friend_list': friend_list,
       'token': token,
     }
     self.render_template('chat.html', params)
@@ -205,7 +218,48 @@ class SendMessageHandler(BaseHandler):
     }
 
     channel.send_message(receiver, json.dumps(newMessage))
-    
+
+class UserConnectedHandler(BaseHandler):
+  def post(self):
+    user_name = self.request.get("from")
+    print "User " + self.request.get("from") + " connected"
+    newMessage = {
+      'control': 'logon',
+      'user_name': user_name,
+    }
+    for friend in FriendList.get_friend_list(user_name):
+      channel.send_message(friend, json.dumps(newMessage))
+
+class UserDisconnectedHandler(BaseHandler):
+  def post(self):
+    user_name = self.request.get("from")
+    print "User " + self.request.get("from") + " disconnected"
+    UserStatus.delete_user_status(user_name)
+
+    newMessage = {
+      'control': 'logout',
+      'user_name': user_name,
+    }
+    for friend in FriendList.get_friend_list(user_name):
+      channel.send_message(friend, json.dumps(newMessage))
+
+# Retrive the friend list for current user
+class FriendListHandler(BaseHandler):
+  @user_required
+  def get(self):
+    user_name = self.user.auth_ids[0]
+    friendList = FriendList.get_friend_list(user_name)
+    friendListWithStatus = []
+    for friend in friendList:
+      status = UserStatus.query_user_status(friend)
+      print "status = " + repr(status)
+      if status:
+        friendListWithStatus.append({'user_name': friend, 'online': True})
+      else:
+        friendListWithStatus.append({'user_name': friend, 'online': False})
+
+    self.response.out.write(json.dumps(friendListWithStatus))
+
 config = {
   'webapp2_extras.auth': {
     'user_model': 'models.User',
@@ -222,7 +276,10 @@ application = webapp2.WSGIApplication([
     webapp2.Route('/login', LoginHandler, name='login'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/add_friend', AddFriendHandler, name='add'),
-    webapp2.Route('/send_message', SendMessageHandler, name='message')
+    webapp2.Route('/friend_list', FriendListHandler),
+    webapp2.Route('/send_message', SendMessageHandler, name='message'),
+    webapp2.Route('/_ah/channel/connected/', UserConnectedHandler),
+    webapp2.Route('/_ah/channel/disconnected/', UserDisconnectedHandler)
 ], debug=True, config=config)
 
 logging.getLogger().setLevel(logging.DEBUG)

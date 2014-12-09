@@ -86,4 +86,35 @@ class User(webapp2_extras.appengine.auth.models.User):
   @classmethod
   def query_user(cls, user_name):
     return User.query(ndb.GenericProperty('auth_ids') == user_name).fetch()
-    
+
+# User has token are online
+class UserStatus(ndb.Model):
+  username = ndb.StringProperty()
+  token = ndb.StringProperty()
+
+  @classmethod
+  def query_user_status(cls, user_name):
+    return UserStatus.query(UserStatus.username == user_name).fetch()
+
+  @classmethod
+  def add_user_status (cls, user_name, token):
+    #check to see if user exists
+    userStatus = cls.query_user_status(user_name)
+    if not userStatus:
+      print "No user status information for " + user_name + ", Let's create it"
+      userStatus = [UserStatus(username = user_name, token = token)]
+    else:
+      userStatus[0].token = token
+
+    userStatus[0].put()
+  
+  @classmethod
+  def delete_user_status(cls, user_name):
+    #check to see if user exists
+    userStatus = cls.query_user_status(user_name)
+    if not userStatus:
+      print user_name + "'s status doesn't exist, he/she must be offline"
+      return False
+
+    userStatus[0].key.delete()
+    return True

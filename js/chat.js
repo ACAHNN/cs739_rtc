@@ -33,9 +33,99 @@ onOpened = function() {
 
 onMessage = function(m) {
   newMessage = JSON.parse(m.data);
-  console.log(newMessage);
-  messages.push(newMessage);
-  updateMessageWindow();
+  if (newMessage.control) {
+    //alert("User login in other place!");
+    //$(location).attr('href',"/login");
+    if (newMessage.control = 'logout') {
+      for (var i = 0; i < friends.length; i++) {
+        if (friends[i].online && friends[i].user_name == newMessage.user_name) {
+          friends[i].online = false;
+        }
+      }
+    }
+    else if (newMessage.control = 'logon') {
+      for (var i = 0; i < friends.length; i++) {
+        if (!friends[i].online && friends[i].user_name == newMessage.user_name) {
+          friends[i].online = true;
+        }
+      }
+    }
+    refreshFriendList(friends);
+  }
+  else {
+    //console.log(newMessage);
+    messages.push(newMessage);
+    updateMessageWindow();
+  }
+}
+
+getFriendList = function() {
+  $.ajax({
+    url: '/friend_list',
+    type: 'GET',
+    success: function(data, status){
+      //console.log("Data = " + data +", status = " + status);
+      friends = JSON.parse(data);
+      refreshFriendList(friends);
+    }
+  });
+}
+
+friendItemHtmlString = function(friend_name, online) {
+  var htmlString = "<li><a ";
+
+  if (online) {
+    htmlString += "class=\"friend\" href=\"javascript:void(0)\" id=" + friend_name + ">" + friend_name;
+    htmlString += "<i class=\"icon-circle text-success\"></i></a></li>"
+  }
+  else {
+    htmlString += "id=" + friend_name + ">" + friend_name;
+    htmlString += "<i class=\"icon-circle text-danger\"></i></a></li>"
+  }
+  return htmlString;
+}
+
+refreshFriendList = function(friends) {
+  //console.log(friends);
+  var htmlString = "<div class=\"heading\">Contacts(";
+  htmlString += friends.length;
+  htmlString += ")<a class=\"icon-plus pull-right\" href=\"/add_friend\"></a></div>";
+  htmlString += "<ul>";
+
+  var onlineFriends = [];
+  var offlineFriends = [];
+
+  for (var i in friends) {
+    if (friends[i].online) {
+      onlineFriends.push(friends[i]);
+    }
+    else {
+      offlineFriends.push(friends[i]);
+    }
+  }
+
+  for (var i in onlineFriends) {
+    htmlString += friendItemHtmlString(onlineFriends[i].user_name, true);
+  }
+
+  for (var i in offlineFriends) {
+    htmlString += friendItemHtmlString(offlineFriends[i].user_name, false);
+  }
+
+  htmlString += "</ul>";
+  htmlString += "</div>";
+  $("#friend_list").html(htmlString);
+
+  $('.friend').on("click", function() {
+    var user_name =  $(this).attr("id");
+    if (receiverName != user_name) {
+      receiverName = user_name;
+      $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>");
+      $("#message_input").html("<form action=\"javascript:msgformPost();\"><input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\" id=\"msg_form\"><input type=\"submit\" value=\"Send\" id=\"send_msg_btn\"></form>");
+      updateMessageWindow();
+    }
+    document.getElementById("msg_form").focus();
+  });
 }
 
 updateMessageWindow = function() {
@@ -81,8 +171,8 @@ openChannel = function() {
   var handler = {
     'onopen': onOpened,
     'onmessage': onMessage,
-    'onerror': function() {},
-    'onclose': function() {}
+    'onerror': function() {console.log("channel in error!")},
+    'onclose': function() {console.log("closed!")}
   };
   var socket = channel.open(handler);
   socket.onopen = onOpened;
@@ -96,17 +186,10 @@ initialize = function() {
 
 var receiverName;
 var messages = [];
+var friends = [];
+
 setTimeout(initialize, 100);
 
 $(document).ready(function() {
-  $('.friend').on("click", function() {
-    var user_name =  $(this).attr("id");
-    if (receiverName != user_name) {
-      receiverName = user_name;
-      $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>");
-      $("#message_input").html("<form action=\"javascript:msgformPost();\"><input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\" id=\"msg_form\"><input type=\"submit\" value=\"Send\" id=\"send_msg_btn\"></form>");
-      updateMessageWindow();
-    }
-    document.getElementById("msg_form").focus();
-  });
+  getFriendList();
 });

@@ -62,20 +62,7 @@
                 <!-- Conversation -->
                 <div class="col-lg-12">
                     <div class="widget-container scrollable chat chat-page">
-                        <div class="contact-list">
-                            <div class="heading">
-                                Contacts({{friend_count}})
-                            <a class="icon-plus pull-right" href="/add_friend"></a>
-                            </div>
-                            <ul>
-                                {% for friend in friend_list %}
-                                <li>
-                                    <a href="javascript:void(0)" class="friend" id={{ friend }}>{{ friend }}
-                                        <i class="icon-circle text-danger"></i>
-                                    </a>
-                                </li>
-                                {% endfor %}
-                            </ul>
+                        <div class="contact-list" id="friend_list">
                         </div>
                         <!-- Chatting window start here -->
                         <div class="heading" id="chat_title"> </div>
