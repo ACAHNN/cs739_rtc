@@ -33,17 +33,18 @@ onOpened = function() {
 
 onMessage = function(m) {
   newMessage = JSON.parse(m.data);
+  //console.log(newMessage);
   if (newMessage.control) {
     //alert("User login in other place!");
     //$(location).attr('href',"/login");
-    if (newMessage.control = 'logout') {
+    if (newMessage.control == 'logout') {
       for (var i = 0; i < friends.length; i++) {
         if (friends[i].online && friends[i].user_name == newMessage.user_name) {
           friends[i].online = false;
         }
       }
     }
-    else if (newMessage.control = 'logon') {
+    else if (newMessage.control == 'logon') {
       for (var i = 0; i < friends.length; i++) {
         if (!friends[i].online && friends[i].user_name == newMessage.user_name) {
           friends[i].online = true;
@@ -51,6 +52,10 @@ onMessage = function(m) {
       }
     }
     refreshFriendList(friends);
+    if (newMessage.control == 'logout' && newMessage.user_name == receiverName) {
+      $("#chat_title").html("");
+      $("#message_input").html("");
+    }
   }
   else {
     //console.log(newMessage);
@@ -86,7 +91,6 @@ friendItemHtmlString = function(friend_name, online) {
 }
 
 refreshFriendList = function(friends) {
-  //console.log(friends);
   var htmlString = "<div class=\"heading\">Contacts(";
   htmlString += friends.length;
   htmlString += ")<a class=\"icon-plus pull-right\" href=\"/add_friend\"></a></div>";
@@ -131,7 +135,7 @@ refreshFriendList = function(friends) {
 updateMessageWindow = function() {
   var htmlString = "<ul>";
 
-  console.log(messages);
+  //console.log(messages);
 
   for (i = 0; i < messages.length; i++) {
     var validMessage = false;
