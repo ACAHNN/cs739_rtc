@@ -228,8 +228,10 @@ class UserConnectedHandler(BaseHandler):
       'control': 'logon',
       'user_name': user_name,
     }
-    for friend in FriendList.get_friend_list(user_name):
-      channel.send_message(friend, json.dumps(newMessage))
+    friends = FriendList.get_friend_list(user_name)
+    if friends:
+      for friend in friends:
+        channel.send_message(friend, json.dumps(newMessage))
 
 class UserDisconnectedHandler(BaseHandler):
   def post(self):
@@ -251,13 +253,14 @@ class FriendListHandler(BaseHandler):
     user_name = self.user.auth_ids[0]
     friendList = FriendList.get_friend_list(user_name)
     friendListWithStatus = []
-    for friend in friendList:
-      status = UserStatus.query_user_status(friend)
-      print "status = " + repr(status)
-      if status:
-        friendListWithStatus.append({'user_name': friend, 'online': True})
-      else:
-        friendListWithStatus.append({'user_name': friend, 'online': False})
+    if friendList:
+      for friend in friendList:
+        status = UserStatus.query_user_status(friend)
+        print "status = " + repr(status)
+        if status:
+          friendListWithStatus.append({'user_name': friend, 'online': True})
+        else:
+          friendListWithStatus.append({'user_name': friend, 'online': False})
 
     self.response.out.write(json.dumps(friendListWithStatus))
 

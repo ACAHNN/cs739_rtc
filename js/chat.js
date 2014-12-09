@@ -51,15 +51,25 @@ onMessage = function(m) {
         }
       }
     }
-    refreshFriendList(friends);
+    refreshFriendList();
     if (newMessage.control == 'logout' && newMessage.user_name == receiverName) {
       $("#chat_title").html("");
       $("#message_input").html("");
+      $("#message_window").html("");
       receiverName = "";
     }
   }
   else {
-    //console.log(newMessage);
+    if (newMessage.from != receiverName) {
+      for (i in friends) {
+        if (friends[i].user_name == newMessage.from) {
+          friends[i].pending_message = true;
+          break;
+        }
+      }
+      refreshFriendList();
+    }
+
     messages.push(newMessage);
     updateMessageWindow();
   }
@@ -72,16 +82,23 @@ getFriendList = function() {
     success: function(data, status){
       //console.log("Data = " + data +", status = " + status);
       friends = JSON.parse(data);
-      refreshFriendList(friends);
+      for (i in friends) {
+        friends[i].pending_message = false;
+      }
+      refreshFriendList();
     }
   });
 }
 
-friendItemHtmlString = function(friend_name, online) {
+friendItemHtmlString = function(friend_name, online, pending_message) {
   var htmlString = "<li><a ";
 
   if (online) {
-    htmlString += "class=\"friend\" href=\"javascript:void(0)\" id=" + friend_name + ">" + friend_name;
+    htmlString += "class=\"friend";
+    if (pending_message) {
+      htmlString += " incoming-message"
+    }
+    htmlString += "\"class=\"friend\" href=\"javascript:void(0)\" id=" + friend_name + ">" + friend_name;
     htmlString += "<i class=\"icon-circle text-success\"></i></a></li>"
   }
   else {
@@ -91,7 +108,8 @@ friendItemHtmlString = function(friend_name, online) {
   return htmlString;
 }
 
-refreshFriendList = function(friends) {
+refreshFriendList = function() {
+  console.log(friends);
   var htmlString = "<div class=\"heading\">Contacts(";
   htmlString += friends.length;
   htmlString += ")<a class=\"icon-plus pull-right\" href=\"/add_friend\"></a></div>";
@@ -110,11 +128,11 @@ refreshFriendList = function(friends) {
   }
 
   for (var i in onlineFriends) {
-    htmlString += friendItemHtmlString(onlineFriends[i].user_name, true);
+    htmlString += friendItemHtmlString(onlineFriends[i].user_name, true, onlineFriends[i].pending_message);
   }
 
   for (var i in offlineFriends) {
-    htmlString += friendItemHtmlString(offlineFriends[i].user_name, false);
+    htmlString += friendItemHtmlString(offlineFriends[i].user_name, false, false);
   }
 
   htmlString += "</ul>";
@@ -128,6 +146,14 @@ refreshFriendList = function(friends) {
       $("#chat_title").html("<i class=\"icon-comments\"></i>Chat with " + user_name + "<i class=\"icon-cog pull-right\"></i><i class=\"icon-smile pull-right\"></i>");
       $("#message_input").html("<form action=\"javascript:msgformPost();\"><input class=\"form-control\" placeholder=\"Input Message...\" type=\"text\" id=\"msg_form\"><input type=\"submit\" value=\"Send\" id=\"send_msg_btn\"></form>");
       updateMessageWindow();
+
+      for (i in friends) {
+        if (friends[i].user_name == receiverName) {
+          friends[i].pending_message = false;
+          break;
+        }
+      }
+      refreshFriendList();
     }
     document.getElementById("msg_form").focus();
   });
