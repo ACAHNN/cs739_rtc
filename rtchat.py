@@ -113,18 +113,10 @@ class MainHandler(BaseHandler):
     #else:
     #  friend_count = len(friend_list)
 
-    status = UserStatus.query_user_status(user_name)
-    if status:
-      token = status[0].token
-      # Send message to let previous page to exit!
-      #newMessage = {
-      #  'control': "multiple_login",
-      #}
-      #channel.send_message(user_name, json.dumps(newMessage))
-    else:
-      token = channel.create_channel(user_name)
-      UserStatus.add_user_status(user_name, token)
+    UserStatus.add_user_status(user_name, "online")
     
+    token = channel.create_channel(user_name, 24 * 60-1)
+
     params = {
       #'friend_count': friend_count,
       #'friend_list': friend_list,
@@ -220,9 +212,15 @@ class SendMessageHandler(BaseHandler):
 
     channel.send_message(receiver, json.dumps(newMessage))
 
+# The Channel might disconnect and connect again
 class UserConnectedHandler(BaseHandler):
   def post(self):
     user_name = self.request.get("from")
+
+    status = UserStatus.query_user_status(user_name)
+    if not status:
+      UserStatus.add_user_status(user_name, "online")
+
     print "User " + self.request.get("from") + " connected"
     newMessage = {
       'control': 'logon',

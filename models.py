@@ -90,21 +90,21 @@ class User(webapp2_extras.appengine.auth.models.User):
 # User has token are online
 class UserStatus(ndb.Model):
   username = ndb.StringProperty()
-  token = ndb.StringProperty()
+  status = ndb.StringProperty()
 
   @classmethod
   def query_user_status(cls, user_name):
     return UserStatus.query(UserStatus.username == user_name).fetch()
 
   @classmethod
-  def add_user_status (cls, user_name, token):
+  def add_user_status (cls, user_name, status):
     #check to see if user exists
     userStatus = cls.query_user_status(user_name)
     if not userStatus:
       print "No user status information for " + user_name + ", Let's create it"
-      userStatus = [UserStatus(username = user_name, token = token)]
+      userStatus = [UserStatus(username = user_name, status = status)]
     else:
-      userStatus[0].token = token
+      userStatus[0].status = status
 
     userStatus[0].put()
   
