@@ -55,6 +55,7 @@ onMessage = function(m) {
     if (newMessage.control == 'logout' && newMessage.user_name == receiverName) {
       $("#chat_title").html("");
       $("#message_input").html("");
+      receiverName = "";
     }
   }
   else {
@@ -188,7 +189,7 @@ initialize = function() {
   //onMessage({data: '{{ initial_message }}'});
 }
 
-var receiverName;
+var receiverName = "";
 var messages = [];
 var friends = [];
 
