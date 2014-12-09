@@ -256,7 +256,7 @@ class FriendListHandler(BaseHandler):
     if friendList:
       for friend in friendList:
         status = UserStatus.query_user_status(friend)
-        print "status = " + repr(status)
+        #print "status = " + repr(status)
         if status:
           friendListWithStatus.append({'user_name': friend, 'online': True})
         else:

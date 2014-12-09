@@ -2,8 +2,10 @@ msgformPost = function () {
   // Do something
   var input = document.getElementById("msg_form");
   var inputData = encodeURIComponent(input.value);
-  sendMessage("/send_message", "to=" + receiverName + "&msg=" + inputData);
-  messages.push({"to":receiverName, "msg": input.value});
+  if (inputData != '') {
+    sendMessage("/send_message", "to=" + receiverName + "&msg=" + inputData);
+    messages.push({"to":receiverName, "msg": input.value});
+  }
   updateMessageWindow();
   input.value = '';
   document.getElementById("msg_form").focus();
@@ -168,14 +170,14 @@ updateMessageWindow = function() {
     var validMessage = false;
     if (messages[i].from) {
       if (messages[i].from == receiverName) {
-        htmlString += "<li><div class=\"bubble\"><a class=\"user-name\" href=\"\">";
+        htmlString += "<li><div class=\"bubble\"><a class=\"user-name\">";
         htmlString += messages[i].from;
         validMessage = true;
       }
     }
     else {
       if (messages[i].to == receiverName) {
-        htmlString += "<li class=\"current-user\"><div class=\"bubble\"><a class=\"user-name\" href=\"\">";
+        htmlString += "<li class=\"current-user\"><div class=\"bubble\"><a class=\"user-name\">";
         htmlString += "Me";
         validMessage = true;
       }
