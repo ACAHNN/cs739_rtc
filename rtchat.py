@@ -140,16 +140,17 @@ class SignupHandler(BaseHandler):
     user_name = self.request.get('username')
     name = self.request.get('name')
     password = self.request.get('password')
+    password1 = self.request.get('password1')
+
+    if password != password1: # check that passwords match
+      self.display_message('Passwords do not match')
+      return 
 
     user_data = self.user_model.create_user(user_name,
       None,
       name=name,
       password_raw=password,
       verified=False)
-    if not user_data[0]: #user_data is a tuple
-      self.display_message('Unable to create user for name %s because of \
-        duplicate keys %s' % (user_name, user_data[1]))
-      return
     
     user = user_data[1]
     user_id = user.get_id()
