@@ -6,7 +6,6 @@ from chatbot import ChatBot
 
 if __name__ == '__main__':
     # create a chatbot instance
-    cb1 = ChatBot(True)
   
     if not sys.argv[1]:
       print "Need argument for site to visit (local or app-engine remot)"
@@ -19,8 +18,15 @@ if __name__ == '__main__':
     if not sys.argv[3]:
       print "Need password of the user to login"
       sys.exit()
+      
+      
+    site = sys.argv[1]
+    # create a chatbot instance
+    cb1 = ChatBot(True, site, False)
+  
+      
     # navigate to the chat site
-    cb1.visit(sys.argv[1])
+    cb1.visit(sys.argv[1] + '/login')
 
     # enter the site
     cb1.login(sys.argv[2], sys.argv[3])
@@ -30,6 +36,8 @@ if __name__ == '__main__':
 
     # select the current freinds list
     friends = cb1.get_friends_list()
+    while not friends:
+      friends = cb1.get_friends_list()
     aFriend = friends[0]
     # iterate through the friends list
   
