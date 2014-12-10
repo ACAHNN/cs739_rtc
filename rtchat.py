@@ -115,7 +115,7 @@ class MainHandler(BaseHandler):
 
     UserStatus.add_user_status(user_name, "online")
     
-    token = channel.create_channel(user_name, 24 * 60-1)
+    token = channel.create_channel(user_name)
 
     params = {
       #'friend_count': friend_count,
@@ -134,10 +134,7 @@ class SignupHandler(BaseHandler):
     password = self.request.get('password')
     password1 = self.request.get('password1')
 
-    if password != password1: # check that passwords match
-      self.display_message('Passwords do not match')
-      return 
-
+    # If user account exists?
     user_data = self.user_model.create_user(user_name,
       None,
       name=name,
