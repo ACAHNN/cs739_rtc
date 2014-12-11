@@ -39,14 +39,14 @@ class ChatBot:
 
     def visit(self, site):
         if self.debug:
-          print "Task: chatbot visiting %s" % site
+            print "Task: chatbot visiting %s" % site 
         self.wd.get(site)
         return None
 
         
     def login(self, username, password):
         if self.debug:
-          print "Task: chatbot logging in -> username: %s password %s" % (username, password)
+            print "Task: chatbot logging in -> username: %s password %s" % (username, password)
 
         element = self.wd.find_element_by_name('username')
         if element:
@@ -67,12 +67,12 @@ class ChatBot:
             if element2:
                 element2.click()
                 if self.debug:
-                  print "Task: chatbot logged out"
+                    print "Task: chatbot logged out"
 
 
     def create_account(self, name, username, password):
         if self.debug:
-          print "Task: chatbot creating account -> username: %s password: %s" % (username, password)
+            print "Task: chatbot creating account -> username: %s password: %s" % (username, password)
 
         self.visit(self.site+'/signup')
         element = self.wd.find_element_by_name('name')
@@ -133,7 +133,8 @@ class ChatBot:
                 if self.debug:
                   print "Task: chatbot selected friend: %s to chat with" % friend_name 
                 element.click()
-
+                return True
+        return False
 
     def get_messages(self):
         
